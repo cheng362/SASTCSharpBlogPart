@@ -10,8 +10,15 @@ builder.Services.AddDbContext<BlogItemContext>(options => options.UseSqlite(conn
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();//注册swagger生成器
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+	app.UseSwagger();
+	app.UseSwaggerUI();
+}
 
 await app.InitializeAsync();
 app.MapBlogItemEndpoints();
