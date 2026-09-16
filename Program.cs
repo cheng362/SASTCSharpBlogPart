@@ -22,5 +22,7 @@ if (app.Environment.IsDevelopment())
 
 await app.InitializeAsync();
 app.MapBlogItemEndpoints();
+app.MapUserEndpoints();
+app.MapCommentEndpoints();
 
 app.Run();
