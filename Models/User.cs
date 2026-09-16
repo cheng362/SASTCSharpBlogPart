@@ -10,6 +10,6 @@ public class User
 	public string AvatarUrl { get; set; } = string.Empty;
 	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-	public List Comments { get; set; } = new();
+	public List<Comment> Comments { get; set; } = new();
 
 }

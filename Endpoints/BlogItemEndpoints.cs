@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SASTCsharpBlogPart.Models;
+using SASTCsharpBlogPart.Data;
 
 /// <summary>
 /// 提供 BlogItem 相关的 API 端点。
