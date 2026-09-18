@@ -48,6 +48,8 @@ async function submit() {
     error.value = '标题和正文不能为空'
     return
   }
+  // 作者强制取当前登录用户名，不信任表单/请求，防止冒名
+  f.author = user.value?.username || f.author
   saving.value = true
   error.value = null
   // 前端没有写服务器 md 文件的能力，正文统一以 data: URI 形式保存，
@@ -105,7 +107,8 @@ async function submit() {
         <div class="row">
           <div class="form-group">
             <label>作者</label>
-            <input v-model="form.author" required>
+            <!-- 作者锁定为登录用户：后端无鉴权，允许自由填写会导致任何人可冒名发布 -->
+            <input :value="form.author" disabled>
           </div>
           <div class="form-group">
             <label>摘要</label>
