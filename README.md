@@ -2,9 +2,9 @@
 
 ![极简的代码](/wwwroot/img/image.png)
 
-这里有一份极简的 Blog 的 API 代码~  
+这里有一份极简的 Blog 的 API 代码~
 目前这份 Blog 采用的是 MiniAPI，假如你对其他类型的框架更熟悉的话也可以自行选择简单重构这个项目
-至于样例 Bolg 我们在 [blogs](/wwwroot/blogs/) 文件夹中提供了一部分（均为 markdown 格式），你也可以自行上传自己喜欢的内容  
+至于样例 Bolg 我们在 [blogs](/wwwroot/blogs/) 文件夹中提供了一部分（均为 markdown 格式），你也可以自行上传自己喜欢的内容
 注意：对于本套题目，我们最注重的部分正是 **评论区功能** 的实现
 
 ## (1) 基础要求
@@ -47,3 +47,11 @@ SASTCsharpBlogPart
 └─SASTCSharpBlogPart.csproj
 
 ```
+
+## 启动方式
+```powershell
+dotnet run #后端
+
+cd frontend
+npm install
+npm run dev#前端
