@@ -77,7 +77,14 @@ async function sendFile(req, res, filePath, extraHeaders = {}) {
   };
   res.writeHead(200, headers);
   if (req.method === 'HEAD') return res.end();
-  createReadStream(filePath).pipe(res);
+  const stream = createReadStream(filePath);
+  stream.on('error', () => {
+    if (!res.headersSent) {
+      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+    }
+    res.end('Internal Server Error');
+  });
+  stream.pipe(res);
   return true;
 }
 
