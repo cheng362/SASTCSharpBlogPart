@@ -34,13 +34,22 @@ SASTCsharpBlogPart
 ├─📂Data
 │ └─BlogSeeder.cs             // 数据生成种子
 ├─📂Endpoints
-│ └─BlogItemEndpoints.cs
+│ ├─BlogItemEndpoints.cs
+│ ├─CommentEndpoints.cs       // 评论 / 楼中楼回复
+│ └─UserEndpoints.cs          // 注册 / 登录
 ├─📂Models
-│ └─BlogItem.cs
+│ ├─BlogItem.cs
+│ ├─Comment.cs
+│ └─User.cs
 ├─📂Properties
 │ └─launchSettings.json
+├─📂src                       // Vue 3 前端源码（views / components / store）
 ├─📂wwwroot
 │ └─📂blogs                     // 一些 Blog 文件
+├─index.html                  // 前端入口
+├─package.json / vite.config.js
+├─serve.js                    // 生产模式托管 + API 代理
+├─start.bat                   // 一键启动脚本
 ├─Program.cs
 ├─appsettings.Development.json
 ├─appsettings.json
@@ -49,9 +58,21 @@ SASTCsharpBlogPart
 ```
 
 ## 启动方式
-```powershell
-dotnet run #后端
 
-cd frontend
-npm install
-npm run dev#前端
+方式一：一键启动（推荐，Windows 双击 `start.bat` 即可）
+
+```powershell
+start.bat        # 开发模式：后端(5253) + 前端(8080)，自动打开浏览器
+start.bat prod   # 生产模式：先构建前端，再由 serve.js 托管
+```
+
+方式二：手动启动（仓库根目录执行）
+
+```powershell
+dotnet run     # 后端 http://localhost:5253
+
+npm install    # 首次需要，安装前端依赖
+npm run dev    # 前端 http://localhost:8080（/api 自动代理到后端）
+```
+
+生产部署：`npm run build` 后运行 `node serve.js`（托管 dist 并代理 API）。
