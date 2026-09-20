@@ -1,23 +1,25 @@
 /*
- * 前端生产构建启动器（开发调试直接用 `cd frontend && npm run dev`）：
- *   1. 构建前端：cd frontend && npm run build   （输出到 frontend/dist）
- *   2. 启动后端：dotnet run                     （默认 http://localhost:5253）
- *   3. 运行本脚本：node serve.js                 （默认 http://localhost:8080）
+ * 前端生产构建启动器（开发调试直接在项目根目录 `npm run dev`）：
+ *   1. 构建前端：npm run build    （输出到 dist/）
+ *   2. 启动后端：dotnet run       （默认 http://localhost:5253）
+ *   3. 运行本脚本：node serve.js  （默认 http://localhost:8080）
  *
- * 职责：托管 frontend/dist 静态文件（SPA 路由回退到 index.html）、
- * 直接提供后端 wwwroot 中的博客正文与图片（后端没有静态文件中间件）、
+ * 职责：托管 dist 静态文件（SPA 路由回退到 index.html）、
+ * 直接提供 wwwroot 中的博客正文与图片（后端没有静态文件中间件）、
  * 并把 /api 反向代理到后端，使前端与接口同源，避免浏览器 CORS 限制。
  */
-'use strict';
+import http from 'node:http';
+import fsp from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const http = require('http');
-const fsp = require('fs/promises');
-const { createReadStream } = require('fs');
-const path = require('path');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = Number(process.env.PORT) || 8080;
 const BACKEND = new URL(process.env.BACKEND_URL || 'http://localhost:5253');
-const DIST = path.join(__dirname, 'frontend', 'dist');
+const DIST = path.join(__dirname, 'dist');
 const WWWROOT = path.join(__dirname, 'wwwroot');
 
 const MIME = {
@@ -132,8 +134,8 @@ async function main() {
   try {
     await fsp.access(path.join(DIST, 'index.html'));
   } catch {
-    console.log('未找到 frontend/dist/index.html，请先执行：cd frontend && npm run build');
-    console.log('开发调试请直接执行：cd frontend && npm run dev');
+    console.log('未找到 dist/index.html，请先在项目根目录执行：npm run build');
+    console.log('开发调试请直接执行：npm run dev');
     process.exit(1);
   }
 
@@ -156,6 +158,14 @@ async function main() {
       return serveWwwroot(req, res, urlPath);
     }
     return serveDist(req, res, urlPath);
+  });
+
+  server.on('error', err => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`端口 ${PORT} 已被占用（开发模式 npm run dev 用的也是 ${PORT}？可用 PORT=8090 node serve.js 换端口）`);
+      process.exit(1);
+    }
+    throw err;
   });
 
   server.listen(PORT, () => {

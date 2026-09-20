@@ -201,3 +201,7 @@ __pycache__/
 
 # Windows thumbnail cache files
 Thumbs.db
+
+# Vite 前端
+dist/
+.vite/
